@@ -1,0 +1,21 @@
+{% extends "main/base_generic.html" %}
+{% block content %}
+<div class="card bg-light mb-3" style="width: 40rem;">
+  <div class="card-header">Добро пожаловать</div>
+  <div class="card-body">
+<form action="" method="POST">
+    {% csrf_token %}
+    <label>Имя пользователя:</label><p>{{ registration_form.username }}</p>
+    <label>{{ registration_form.email.label }}:</label><p>{{ registration_form.email }}</p>
+    <label>Пароль:</label><p>{{ registration_form.password1 }}</p>
+    <label>Подтвердите пароль:</label><p>{{ registration_form.password2 }}</p>
+
+    {% for message in messages %}
+    <p style="color: turquoise">{{ message }}</p>
+    {% endfor %}
+
+    <input type="submit" class="btn btn-primary btn-sm m-2" value="Зарегистрироваться">
+</form>
+  </div>
+    </div>
+{% endblock %}

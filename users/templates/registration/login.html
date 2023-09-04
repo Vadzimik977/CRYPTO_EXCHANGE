@@ -1,0 +1,45 @@
+{% extends "main/base_generic.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Введен неверный логин или пароль</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>У вашего аккаунта нет доступа к данной странице. Для продолжения, авторизуйтесь с валидного аккаунта</p>
+  {% else %}
+    <p>Для продолжения, авторизуйтесь с валидного аккаунта</p>
+  {% endif %}
+{% endif %}
+<div class="card bg-light mb-3" style="max-width: 40rem;">
+  <div class="card-header">Добро пожаловать</div>
+  <div class="card-body">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="text-center">
+    <h3>Авторизуйтесь для доступа к сайту</h3>
+  </div>
+      </div>
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+   <div class="text-center">
+<table>
+<tr>
+  <td>Логин</td>
+  <td>{{ form.username }}</td>
+</tr>
+<tr>
+  <td>Пароль</td>
+  <td>{{ form.password }}</td>
+</tr>
+</table>
+     </div>
+<input type="submit" class="btn btn-primary btn-lg m-2" value="Войти" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+  </div>
+  </div>
+
+{% endblock %}

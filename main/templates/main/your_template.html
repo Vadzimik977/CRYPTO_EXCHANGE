@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Order</title>
+    <!-- Include necessary CSS and JS libraries, Bootstrap for example -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include your custom CSS and JavaScript files if needed -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Create Order</h1>
+        <form id="order-form">
+            <!-- Form fields here (email, amount, crypto selection) -->
+            <input type="hidden" id="operation_type" value="">
+            {% csrf_token %}
+    <button id="submit_btn_buy" class="btn btn-outline-dark">Отправить запрос</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#order-form").submit(function(e) {
+                e.preventDefault();
+
+                // Fetch form data and make an AJAX request to create the order
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'create_order' %}",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        // Redirect to confirmation page or handle as needed
+                    },
+                    error: function(error) {
+                        // Handle errors
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

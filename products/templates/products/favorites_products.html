@@ -1,0 +1,19 @@
+{% extends "main/base_generic.html" %}
+
+{% block content %}
+<h1>Избранные криптовалюты</h1>
+
+{% if favorites_products_list %}
+<ul>
+
+    {% for product in favorites_products_list %}
+    <li>
+        <a href="{% url 'product-detail' product.pk %}">{{product.title}}</a> ({{ product.category }})
+    </li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<p>Избранных криптовалют нет</p>
+{% endif %}
+{% endblock %}

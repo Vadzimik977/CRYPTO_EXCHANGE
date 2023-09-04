@@ -1,0 +1,43 @@
+{% extends 'main/base_generic.html' %}
+
+{% block title %}Ожидание{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mt-4">Спасибо, что используете наш обменник!</h1>
+    <h4 class="text-nowrap">Ожидайте, мы оплачиваем Ваш ордер</h4>
+    <h4 class="mt-4">Не покидайте данную страницу, она обновится автоматически </h4>
+
+</div>
+<script>
+    // Получение параметров из URL (например, order_id, amount, crypto_currency)
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlOrderId = urlParams.get('order_id'); // используйте другое имя переменной
+
+    // Проверка, был ли заказ обработан
+    function checkOrderStatus() {
+        // Выполняем AJAX запрос на сервер для проверки статуса заказа
+        $.ajax({
+            type: "GET",
+            url: "/check_order_status/?order_id=" + urlOrderId, // используйте другое имя переменной
+            success: function(response) {
+                if (response.order_processed === 1) {
+                    window.location.href = "{% url 'success' %}?order_id=" + urlOrderId; // используйте другое имя переменной
+                };
+                if (response.order_processed === 2) {
+                    window.location.href = '/fail';
+                };
+            },
+            error: function(error) {
+                console.error("Ошибка при выполнении AJAX запроса:", error);
+            }
+        });
+    }
+
+    // Запускаем проверку статуса заказа через определенный интервал (например, каждые 5 секунд)
+    setInterval(checkOrderStatus, 5000); // 5000 миллисекунд = 5 секунд
+</script>
+
+
+
+{% endblock %}

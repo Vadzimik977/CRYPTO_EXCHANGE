@@ -1,0 +1,103 @@
+{% extends 'main/base_generic.html' %}
+
+{% block title %}Продажа криптовалюты{% endblock %}
+
+{% block extra_styles %}
+    <!-- Подключение стилей Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="card text-white bg-secondary mb-3" style="max-width: 40rem;">
+    <div class="card-header">Покупка криптовалюты</div>
+    <div class="card-body">
+    <div class="container mt-5">
+        <h1 class="mt-4">Оплатите ордер в течение: <span id="timer">30:00</span></h1>
+        <h1 class="mt-4">Ваш номер заказа: <span id="order_id"></span></h1>
+        <p>Оплатите ордер по следующим реквизитам:</p>
+        <h4 class="mt-4">Отправьте следующее количество криптовалюты: <span id="amount"></span></h4>
+
+        <p>Валюта: <span id="crypto_currency"></span></p>
+        <p id="crypto_address"></p>
+        <button id="payment_button" class="btn btn-primary">Оплачено</button>
+    </div>
+</div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+        // Получение параметров из URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var amount = urlParams.get('amount');
+        var crypto_currency = urlParams.get('crypto_currency');
+        var order_id = urlParams.get('order_id');
+        var cur1 = urlParams.get('crypto_currency');
+
+
+
+        // Вставка значений в элементы
+        $('#amount').text(amount);
+        $('#order_id').text(order_id);
+        $('#crypto_currency').text(crypto_currency);
+        $('#cur1').text(cur1);
+        console.log("Currency from JavaScript:", crypto_currency);
+        if (crypto_currency.toLowerCase() === 'bitcoin') {
+        $('#crypto_address').text('Bitcoin адрес: 38SUkXACeUcb1FdmszfS9bKHAs38yV2oFy');
+    } else if (crypto_currency.toLowerCase() === 'ethereum') {
+        $('#crypto_address').text('ETH адрес пополнения: 0x22a3a12af84cefbd537f838af704adf0e370cecf');
+    } else {
+        $('#crypto_address').text('Неизвестная валюта: ' + crypto_currency);
+    }
+        console.log("Currency from JavaScript:", crypto_address);
+        // Остальной JavaScript для таймера и другой логики страницы
+    });
+    // Таймер обратного отсчета
+    var countdown = 1800; // 30 минут в секундах
+    var timerElement = document.getElementById('timer');
+
+    function updateTimer() {
+        var minutes = Math.floor(countdown / 60);
+        var seconds = countdown % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (countdown === 0) {
+            // Действия по истечении времени (если нужны)
+        } else {
+            countdown--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    updateTimer();
+
+
+     $(document).ready(function() {
+        console.log("Currency from JavaScript:", currency);
+         $('#payment_button').on('click', function() {
+            var order_id = $('#order_id').text(); // Получаем айди заказа из элемента
+            var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'mark_order_as_paid' %}",
+                data: {
+                    'order_id': order_id,
+                    'csrfmiddlewaretoken': csrfToken
+                },
+                success: function(response) {
+                    var order_id = $('#order_id').text();
+                    window.location.href = "{% url 'waiting' %}?order_id="+order_id;
+                    alert(`Ваша заявка обрабатывается и будет выполнена в течение 30 минут.`);
+                },
+                error: function(error) {
+                    alert(`Ошибка`);
+                }
+            });
+        });
+    });
+    // Обработчик кнопки "Оплачено"
+    // document.getElementById('payment_button').addEventListener('click', function() {
+    //     window.location.href = "{% url 'waiting' %}";
+    //     alert(`Ваша заявка обрабатывается и будет выполнена в течение 30 минут.`);
+    // });
+</script>
+{% endblock %}

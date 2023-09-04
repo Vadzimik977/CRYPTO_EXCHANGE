@@ -1,0 +1,27 @@
+{% extends 'main/base_generic.html' %}
+
+{% block content %}
+<div class="card bg-light mb-3" style="max-width: 40rem;">
+  <div class="card-header">Личная информация</div>
+  <div class="card-body">
+        <div class="mt-3">
+
+          <p>Email: {{ user_profile.user.email}}</p>
+          <p>Имя: {{ user_profile.name }}</p>
+            <p>Фамилия: {{ user_profile.surname }}</p>
+            <p>Отчество: {{ user_profile.father }}</p>
+            <p>Bitcoin Address: {{ user_profile.bitcoin_address }}</p>
+            <p>Ethereum Address: {{ user_profile.ethereum_address }}</p>
+          <p>Card Number: {{ user_profile.card_number }}</p>
+          <p>Номер паспорта: {{ user_profile.passport_number }}</p>
+        </div>
+      <div id="info-container"></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}

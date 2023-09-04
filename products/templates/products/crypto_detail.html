@@ -1,0 +1,49 @@
+{% extends "main/base_generic.html" %}
+
+{% block content %}
+    <title>Crypto Detail</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var cryptoName = "{{ crypto_name }}";  // Получите имя криптовалюты из Django
+            var ctx = document.getElementById('cryptoChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: `${cryptoName} Price`,
+                        data: [],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            function updateChart() {
+                $.getJSON(`https://api.coingecko.com/api/v3/coins/${cryptoName}/market_chart`,
+                    function(data) {
+                        var prices = data.prices;
+                        var timestamps = prices.map(function(item) {
+                            return new Date(item[0]).toLocaleTimeString();
+                        });
+                        var values = prices.map(function(item) {
+                            return item[1];
+                        });
+
+                        chart.data.labels = timestamps;
+                        chart.data.datasets[0].data = values;
+                        chart.update();
+                    });
+            }
+
+            updateChart();
+            setInterval(updateChart, 30 * 60 * 1000); // Обновление каждые 30 минут (в миллисекундах)
+        });
+    </script>
+
+    <h1>Crypto Chart</h1>
+    <canvas id="cryptoChart" width="400" height="200"></canvas>
+{% endblock %}

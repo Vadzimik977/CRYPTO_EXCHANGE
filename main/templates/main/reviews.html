@@ -1,0 +1,28 @@
+{% extends 'main/base_generic.html' %}
+
+{% block title %}Отзывы{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mt-4">Отзывы наших клиентов</h1>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        {% for review in reviews_list %}
+        <div class="col-md-6 mb-4">
+            <div class="card bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.user.username }}</h5>
+                    <p class="card-text">Оценка: {{ review.rating }}</p>
+                    <p class="card-text">{{ review.text }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}
